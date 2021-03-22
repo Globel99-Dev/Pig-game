@@ -6,6 +6,7 @@ const score = document.querySelectorAll('.score');
 const currentScore = document.querySelectorAll('.current-score');
 const dicePng = document.querySelector('.dice');
 const activePlayer = document.querySelector('.player--active');
+const current player = document.querySelectorAll('.player');
 let scorePlayer1 = document.querySelector('.player--active').children[1];
 const activeScore = document.querySelector('.player--active').children[2]
   .children[1];
@@ -43,6 +44,10 @@ const resetGame = () => {
     currentScore[i].textContent = '0';
   }
   dicePng.classList.add('hidden');
+  for (let i = 0; i < currentPlayer.length; i++) {
+
+}
+
   //document.querySelector('#score--1').textContent = '0';
   //document.querySelector('#score--0').textContent = '0';
 };
