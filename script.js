@@ -6,7 +6,7 @@ const score = document.querySelectorAll('.score');
 const currentScore = document.querySelectorAll('.current-score');
 const dicePng = document.querySelector('.dice');
 const activePlayer = document.querySelector('.player--active');
-const current player = document.querySelectorAll('.player');
+const currentPlayer = document.querySelectorAll('.player');
 let scorePlayer1 = document.querySelector('.player--active').children[1];
 const activeScore = document.querySelector('.player--active').children[2]
   .children[1];
@@ -56,6 +56,8 @@ const freezePlayer = function () {
   let w = Number(activeScore.textContent);
   console.log(w);
   scorePlayer1.textContent = `${w}`;
+  for (let i = 0; i < currentPlayer.length; i++) {
+  If (currentPlayer
 };
 
 btnNewGame.addEventListener('click', resetGame);
