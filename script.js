@@ -1,74 +1,100 @@
 'use strict';
-const btnNewGame = document.querySelector('.btn--new');
-const btnRollDice = document.querySelector('.btn--roll');
+
+const player0El = document.querySelector('.player--0');
+const player1El = document.querySelector('.player--1');
+const score0El = document.querySelector('#score--0');
+const score1El = document.getElementById('score--1');
+const current0El = document.getElementById('current--0');
+const current1El = document.getElementById('current--1');
+
+const diceEl = document.querySelector('.dice');
+const btnNew = document.querySelector('.btn--new');
+const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
-const score = document.querySelectorAll('.score');
-const currentScore = document.querySelectorAll('.current-score');
-const dicePng = document.querySelector('.dice');
-const activePlayer = document.querySelector('.player--active');
-const currentPlayer = document.querySelectorAll('.player');
-let scorePlayer1 = document.querySelector('.player--active').children[1];
-const activeScore = document.querySelector('.player--active').children[2]
-  .children[1];
+const playerGet = document.querySelectorAll('.player');
 
-const randomNumber = function () {
-  const luckyNumber = Math.floor(Math.random() * 6) + 1;
-  dicePng.classList.remove('hidden');
-  //activeScore.textContent = `${luckyNumber}`;
-  let x = luckyNumber;
-  let y = Number(activeScore.textContent);
-  if (luckyNumber !== 1) activeScore.textContent = `${y + x}`;
-  /* for (let i = 0; i < x; i++) {
-    if (luckyNumber !== 1) {
+//Iniciamos las variables para poder usarlas en el scope global
+let scores, currentScore, activePlayer, playing;
+
+const initGame = function () {
+  // Reasignamos las variables en el scope local
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
+  // this variable controls is we are still playing (there is no winner)
+  // playing true = no winner yet
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+  diceEl.classList.add('hidden');
+  //scores[(0, 0)];
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+  document.getElementById(`name--0`).textContent = `PLAYER 0`;
+  document.getElementById(`name--1`).textContent = `PLAYER 1`;
+};
+
+initGame();
+
+const switchPlayer = function () {
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+  player0El.classList.toggle('player--active');
+  player1El.classList.toggle('player--active');
+};
+
+btnRoll.addEventListener('click', function () {
+  // Generate Random Number
+  if (playing) {
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    // Display dice.
+    diceEl.classList.remove('hidden');
+    diceEl.src = `dice-${dice}.png`;
+    // Check if rolled is 1: if true, switch to next player.
+    if (dice !== 1) {
+      // Add dice to current score
+      currentScore += dice;
+      document.getElementById(
+        `current--${activePlayer}`
+      ).textContent = currentScore;
+    } else {
+      // Switch next player
+      switchPlayer();
     }
   }
-  if (activeScore.textContent === '0') {
-  } else {
-  }
-  console.log(`numerosumado = a luckynumber ${numeroSumado}`);
-  numeroSumado = numeroSumado + luckyNumber;
-  console.log(`numerosumado + luckynumber = ${numeroSumado}`); */
-  dicePng.src = `dice-${luckyNumber}.png`;
-  console.log(luckyNumber);
-  /* if (luckyNumber !== 1) {
-    for (i = 1; i > luckyNumber; i++) {
-      let x = 
+});
+
+btnHold.addEventListener('click', function () {
+  // Add current score to active player's score
+  if (playing) {
+    scores[activePlayer] += currentScore;
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
+
+    // Check if player's score is >= 100
+    if (scores[activePlayer] >= 100) {
+      // Finish the game
+      playing = false;
+      diceEl.classList.add('hidden');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
+      document.getElementById(`name--${activePlayer}`).textContent =
+        'HAI VINTO!';
+    } else {
+      // Switch to next player
+      switchPlayer();
     }
-  } */
-  return luckyNumber;
-};
-
-const resetGame = () => {
-  for (let i = 0; i < score.length; i++) {
-    score[i].textContent = '0';
-    currentScore[i].textContent = '0';
   }
-  dicePng.classList.add('hidden');
-  for (let i = 0; i < currentPlayer.length; i++) {
+});
 
-}
-
-  //document.querySelector('#score--1').textContent = '0';
-  //document.querySelector('#score--0').textContent = '0';
-};
-
-const freezePlayer = function () {
-  let w = Number(activeScore.textContent);
-  console.log(w);
-  scorePlayer1.textContent = `${w}`;
-  for (let i = 0; i < currentPlayer.length; i++) {
-  If (currentPlayer
-};
-
-btnNewGame.addEventListener('click', resetGame);
-btnRollDice.addEventListener('click', randomNumber);
-btnHold.addEventListener('click', freezePlayer);
-
-/* Mientras luckyNumber no sea igual a 1, continuar a sumar los numeros
-let diceRoll = Math.floor(Math.random() * 6) + 1;
-
-while (diceRoll !== 6) {
-  console.log(`This is not 6, this is: ${diceRoll}`);
-  diceRoll = Math.floor(Math.random() * 6) + 1;
-  if (diceRoll === 6) console.log(`This is a ${diceRoll}`);
-} */
+//Here didn't create any function, instead the initGame is passed when 'click'
+btnNew.addEventListener('click', initGame);
